@@ -26,7 +26,7 @@ public class Download {
 		{
 			place+=len;
 			bos.write(buffer, 0, len);
-			System.out.printf("%.1f\n",(float)place/longer*100);
+			System.out.println(place/longer*100+"%");
 		}
 		bos.close();
 		return bos.toByteArray();
@@ -45,6 +45,7 @@ public class Download {
 				code=conn.getResponseCode();
 				if(code==200||code==206)
 				{	
+					System.out.println("开始下载");
 					InputStream is=conn.getInputStream();
 					byte[] getdata=readinputstream(is);
 					File file=new File(savepath);
