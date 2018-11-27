@@ -34,7 +34,7 @@ public class Download {
 		{ 
 			int k=sec;
 			sec=getSecond(new Date());
-			if(sec>k)
+			if(sec>k||sec==0)
 			{
 				int c=place-now;
 				int speed=c/1024;
