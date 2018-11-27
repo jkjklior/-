@@ -60,9 +60,9 @@ public class Download {
 			URL url=new URL(urlstr);System.out.println("ok");
 			try {
 				HttpURLConnection conn=(HttpURLConnection)url.openConnection();
-				conn.setConnectTimeout(3*1000);System.out.println("ok");
-				conn.setRequestMethod("GET");System.out.println("ok");
-				longer=conn.getContentLength();System.out.println("ok");
+				conn.setConnectTimeout(3*1000);//System.out.println("ok");
+				conn.setRequestMethod("GET");//System.out.println("ok");
+				longer=conn.getContentLength();//System.out.println("ok");
 				int code=0;System.out.println("ok");
 				code=conn.getResponseCode();System.out.println("ok");
 				if(code==200||code==206)
