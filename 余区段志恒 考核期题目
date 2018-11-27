@@ -10,42 +10,64 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Scanner;
+import java.util.logging.Handler;
 
 public class Download {
 	static int place=0;
 	static int longer=0;
 	static int now;
+	private static Handler mHandler;
 	
 	public static byte[] readinputstream(InputStream is) throws IOException
 	{
 		byte[] buffer=new byte[40960];
 		int len=0;
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		Date day=new Date();    
+		int sec=0;
+		int now=0;
 		while((len=is.read(buffer))!=-1)
-		{
+		{ 
+			int k=sec;
+			sec=getSecond(new Date());
+			if(sec>k)
+			{
+				int c=place-now;
+				int speed=c/1024;
+				now=place;
+				System.out.println("下载速速："+speed+"kb/s");
+				System.out.println("下载进度："+place/longer+"%");
+			}
 			place+=len;
 			bos.write(buffer, 0, len);
-			System.out.println(place/longer*100+"%");
 		}
 		bos.close();
 		return bos.toByteArray();
 	}
+		public static int getSecond(Date date) {
+	        Calendar calendar = Calendar.getInstance();
+	        calendar.setTime(date);
+	        return calendar.get(Calendar.SECOND);
+	    }
 	public static void downlaod(String urlstr,String filename,String savepath)
 	{
 		String ext=urlstr.substring(urlstr.lastIndexOf("."));
 		try {
-			URL url=new URL(urlstr);
+			URL url=new URL(urlstr);System.out.println("ok");
 			try {
 				HttpURLConnection conn=(HttpURLConnection)url.openConnection();
-				conn.setConnectTimeout(3*1000);
-				//conn.setRequestMethod("GET");
-				longer=conn.getContentLength();
-				int code=0;
-				code=conn.getResponseCode();
+				conn.setConnectTimeout(3*1000);System.out.println("ok");
+				conn.setRequestMethod("GET");System.out.println("ok");
+				longer=conn.getContentLength();System.out.println("ok");
+				int code=0;System.out.println("ok");
+				code=conn.getResponseCode();System.out.println("ok");
 				if(code==200||code==206)
 				{	
-					System.out.println("开始下载");
+					System.out.println("连接成功，开始下载");
 					InputStream is=conn.getInputStream();
 					byte[] getdata=readinputstream(is);
 					File file=new File(savepath);
@@ -55,7 +77,7 @@ public class Download {
 					fos.write(getdata);
 					if(fos!=null)fos.close();
 					if(is!=null)is.close();
-					System.out.println("download success");
+					System.out.println("下载成功");
 				}
 				
 			} catch (IOException e) {
